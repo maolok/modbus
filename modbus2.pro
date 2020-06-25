@@ -15,8 +15,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         serialport.cpp \
-    principal.cpp
+    principal.cpp \
+    form.cpp
 
 HEADERS  += serialport.h \
     principal.h \
-    Crc16.h
+    form.h
+
+FORMS += \
+    form.ui

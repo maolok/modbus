@@ -8,13 +8,7 @@ serialport::serialport(QWidget *parent)
 {
 
     connect(serial, &QSerialPort::readyRead, this, &serialport::readData);
-
-
-    //QTimer *time = new QTimer();
-
-    //time->start(1000);
-
-    //connect (time,&QTimer::timeout,&principal::cicloprincipal);
+    connect (temporizador,&QTimer::timeout,this,&serialport::readbuffer);
 
 
 
@@ -28,12 +22,13 @@ serialport::~serialport()
 bool serialport::configuracionpuerto()
 {
 
-        serial->setPortName("ttyACM0");
+        serial->setPortName("ttyUSB0");
         serial->setBaudRate(QSerialPort::Baud9600);
         serial->setDataBits(QSerialPort::Data8);
         serial->setParity(QSerialPort::NoParity);
         serial->setStopBits(QSerialPort::OneStop);
         serial->setFlowControl(QSerialPort::NoFlowControl);
+
         if(serial->open(QIODevice::ReadWrite))
         {
             return true;
@@ -57,13 +52,59 @@ void serialport::cerrarpuerto()
 
 }
 
-QByteArray serialport::readData()
+void serialport::readData()
 {
-    QByteArray data = serial->readAll();
-     qDebug()<<data;
-      return data;
+    temporizador->start(1000);
+
+
 
 }
+
+void serialport::readbuffer()
+{
+#ifdef esteban_gay
+    qDebug()<<"esteban le gusta ymca";
+
+#else
+    qDebug()<<"esteban le gusta lady gaga";
+#endif
+
+     temporizador->stop();
+     data = serial->readAll();
+     qDebug()<<"RESPUESTA : "<<data;
+     principal p;
+
+   /*
+
+     DataW data1 = p.extraerdatosW(data);
+     qDebug()<<"datos :";
+     qDebug()<<"id esclavo :"<<data1.idslave;
+
+     qDebug()<<"Registro de inicio:"<<data1.desde;
+     qDebug()<<"# Registros escritos :"<<data1.cantidadregistros;
+     qDebug()<<"validacion crc :"<<data1.validacioncrc;
+
+*/
+
+
+
+
+     DataR data1 = p.extraerdatosR(data);
+
+     qDebug()<<"datos :";
+     qDebug()<<"id esclavo :"<<data1.idslave;
+
+     qDebug()<<"# bytes :"<<data1.numbytes;
+     qDebug()<<"datos :"<<data1.data;
+     qDebug()<<"validacion crc :"<<data1.validacioncrc;
+
+
+
+
+
+}
+
+
 
 void serialport::escribirenpuerto(QByteArray data)
 {

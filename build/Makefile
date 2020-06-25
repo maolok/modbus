@@ -15,7 +15,7 @@ CXX           = g++
 DEFINES       = -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_SERIALPORT_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -std=gnu++11 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I../../modbus2 -I. -I../../QT/5.7/gcc_64/include -I../../QT/5.7/gcc_64/include/QtWidgets -I../../QT/5.7/gcc_64/include/QtGui -I../../QT/5.7/gcc_64/include/QtSerialPort -I../../QT/5.7/gcc_64/include/QtCore -I. -I../../QT/5.7/gcc_64/mkspecs/linux-g++
+INCPATH       = -I../../modbus2 -I. -I../../QT/5.7/gcc_64/include -I../../QT/5.7/gcc_64/include/QtWidgets -I../../QT/5.7/gcc_64/include/QtGui -I../../QT/5.7/gcc_64/include/QtSerialPort -I../../QT/5.7/gcc_64/include/QtCore -I. -I. -I../../QT/5.7/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/esteban/QT/5.7/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -50,11 +50,15 @@ OBJECTS_DIR   = ./
 
 SOURCES       = ../main.cpp \
 		../serialport.cpp \
-		../principal.cpp moc_serialport.cpp
+		../principal.cpp \
+		../form.cpp moc_serialport.cpp \
+		moc_form.cpp
 OBJECTS       = main.o \
 		serialport.o \
 		principal.o \
-		moc_serialport.o
+		form.o \
+		moc_serialport.o \
+		moc_form.o
 DIST          = ../../../QT/5.7/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../QT/5.7/gcc_64/mkspecs/common/unix.conf \
 		../../../QT/5.7/gcc_64/mkspecs/common/linux.conf \
@@ -206,9 +210,10 @@ DIST          = ../../../QT/5.7/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../QT/5.7/gcc_64/mkspecs/features/lex.prf \
 		../../modbus2.pro ../serialport.h \
 		../principal.h \
-		../Crc16.h ../main.cpp \
+		../form.h ../main.cpp \
 		../serialport.cpp \
-		../principal.cpp
+		../principal.cpp \
+		../form.cpp
 QMAKE_TARGET  = modbus2
 DESTDIR       = 
 TARGET        = modbus2
@@ -217,7 +222,7 @@ TARGET        = modbus2
 first: all
 ####### Build rules
 
-$(TARGET):  $(OBJECTS)  
+$(TARGET): ui_form.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: ../modbus2.pro ../../QT/5.7/gcc_64/mkspecs/features/spec_pre.prf \
@@ -543,8 +548,9 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../serialport.h ../principal.h ../Crc16.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../main.cpp ../serialport.cpp ../principal.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../serialport.h ../principal.h ../form.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../main.cpp ../serialport.cpp ../principal.cpp ../form.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../form.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -570,9 +576,9 @@ benchmark: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_serialport.cpp
+compiler_moc_header_make_all: moc_serialport.cpp moc_form.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_serialport.cpp
+	-$(DEL_FILE) moc_serialport.cpp moc_form.cpp
 moc_serialport.cpp: ../../QT/5.7/gcc_64/include/QtWidgets/QMainWindow \
 		../../QT/5.7/gcc_64/include/QtWidgets/qmainwindow.h \
 		../../QT/5.7/gcc_64/include/QtWidgets/qwidget.h \
@@ -687,17 +693,140 @@ moc_serialport.cpp: ../../QT/5.7/gcc_64/include/QtWidgets/QMainWindow \
 		../../QT/5.7/gcc_64/bin/moc
 	/home/esteban/QT/5.7/gcc_64/bin/moc $(DEFINES) -I/home/esteban/QT/5.7/gcc_64/mkspecs/linux-g++ -I/home/esteban/modbus2 -I/home/esteban/QT/5.7/gcc_64/include -I/home/esteban/QT/5.7/gcc_64/include/QtWidgets -I/home/esteban/QT/5.7/gcc_64/include/QtGui -I/home/esteban/QT/5.7/gcc_64/include/QtSerialPort -I/home/esteban/QT/5.7/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../serialport.h -o moc_serialport.cpp
 
+moc_form.cpp: ../../QT/5.7/gcc_64/include/QtWidgets/QWidget \
+		../../QT/5.7/gcc_64/include/QtWidgets/qwidget.h \
+		../../QT/5.7/gcc_64/include/QtGui/qwindowdefs.h \
+		../../QT/5.7/gcc_64/include/QtCore/qglobal.h \
+		../../QT/5.7/gcc_64/include/QtCore/qconfig.h \
+		../../QT/5.7/gcc_64/include/QtCore/qfeatures.h \
+		../../QT/5.7/gcc_64/include/QtCore/qsystemdetection.h \
+		../../QT/5.7/gcc_64/include/QtCore/qprocessordetection.h \
+		../../QT/5.7/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../QT/5.7/gcc_64/include/QtCore/qtypeinfo.h \
+		../../QT/5.7/gcc_64/include/QtCore/qtypetraits.h \
+		../../QT/5.7/gcc_64/include/QtCore/qisenum.h \
+		../../QT/5.7/gcc_64/include/QtCore/qsysinfo.h \
+		../../QT/5.7/gcc_64/include/QtCore/qlogging.h \
+		../../QT/5.7/gcc_64/include/QtCore/qflags.h \
+		../../QT/5.7/gcc_64/include/QtCore/qatomic.h \
+		../../QT/5.7/gcc_64/include/QtCore/qbasicatomic.h \
+		../../QT/5.7/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../QT/5.7/gcc_64/include/QtCore/qgenericatomic.h \
+		../../QT/5.7/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../QT/5.7/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../QT/5.7/gcc_64/include/QtCore/qglobalstatic.h \
+		../../QT/5.7/gcc_64/include/QtCore/qmutex.h \
+		../../QT/5.7/gcc_64/include/QtCore/qnumeric.h \
+		../../QT/5.7/gcc_64/include/QtCore/qversiontagging.h \
+		../../QT/5.7/gcc_64/include/QtCore/qobjectdefs.h \
+		../../QT/5.7/gcc_64/include/QtCore/qnamespace.h \
+		../../QT/5.7/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../QT/5.7/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../QT/5.7/gcc_64/include/QtCore/qobject.h \
+		../../QT/5.7/gcc_64/include/QtCore/qstring.h \
+		../../QT/5.7/gcc_64/include/QtCore/qchar.h \
+		../../QT/5.7/gcc_64/include/QtCore/qbytearray.h \
+		../../QT/5.7/gcc_64/include/QtCore/qrefcount.h \
+		../../QT/5.7/gcc_64/include/QtCore/qarraydata.h \
+		../../QT/5.7/gcc_64/include/QtCore/qstringbuilder.h \
+		../../QT/5.7/gcc_64/include/QtCore/qlist.h \
+		../../QT/5.7/gcc_64/include/QtCore/qalgorithms.h \
+		../../QT/5.7/gcc_64/include/QtCore/qiterator.h \
+		../../QT/5.7/gcc_64/include/QtCore/qhashfunctions.h \
+		../../QT/5.7/gcc_64/include/QtCore/qpair.h \
+		../../QT/5.7/gcc_64/include/QtCore/qbytearraylist.h \
+		../../QT/5.7/gcc_64/include/QtCore/qstringlist.h \
+		../../QT/5.7/gcc_64/include/QtCore/qregexp.h \
+		../../QT/5.7/gcc_64/include/QtCore/qstringmatcher.h \
+		../../QT/5.7/gcc_64/include/QtCore/qcoreevent.h \
+		../../QT/5.7/gcc_64/include/QtCore/qscopedpointer.h \
+		../../QT/5.7/gcc_64/include/QtCore/qmetatype.h \
+		../../QT/5.7/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../QT/5.7/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../QT/5.7/gcc_64/include/QtCore/qobject_impl.h \
+		../../QT/5.7/gcc_64/include/QtCore/qmargins.h \
+		../../QT/5.7/gcc_64/include/QtGui/qpaintdevice.h \
+		../../QT/5.7/gcc_64/include/QtCore/qrect.h \
+		../../QT/5.7/gcc_64/include/QtCore/qsize.h \
+		../../QT/5.7/gcc_64/include/QtCore/qpoint.h \
+		../../QT/5.7/gcc_64/include/QtGui/qpalette.h \
+		../../QT/5.7/gcc_64/include/QtGui/qcolor.h \
+		../../QT/5.7/gcc_64/include/QtGui/qrgb.h \
+		../../QT/5.7/gcc_64/include/QtGui/qrgba64.h \
+		../../QT/5.7/gcc_64/include/QtGui/qbrush.h \
+		../../QT/5.7/gcc_64/include/QtCore/qvector.h \
+		../../QT/5.7/gcc_64/include/QtGui/qmatrix.h \
+		../../QT/5.7/gcc_64/include/QtGui/qpolygon.h \
+		../../QT/5.7/gcc_64/include/QtGui/qregion.h \
+		../../QT/5.7/gcc_64/include/QtCore/qdatastream.h \
+		../../QT/5.7/gcc_64/include/QtCore/qiodevice.h \
+		../../QT/5.7/gcc_64/include/QtCore/qline.h \
+		../../QT/5.7/gcc_64/include/QtGui/qtransform.h \
+		../../QT/5.7/gcc_64/include/QtGui/qpainterpath.h \
+		../../QT/5.7/gcc_64/include/QtGui/qimage.h \
+		../../QT/5.7/gcc_64/include/QtGui/qpixelformat.h \
+		../../QT/5.7/gcc_64/include/QtGui/qpixmap.h \
+		../../QT/5.7/gcc_64/include/QtCore/qsharedpointer.h \
+		../../QT/5.7/gcc_64/include/QtCore/qshareddata.h \
+		../../QT/5.7/gcc_64/include/QtCore/qhash.h \
+		../../QT/5.7/gcc_64/include/QtCore/qsharedpointer_impl.h \
+		../../QT/5.7/gcc_64/include/QtGui/qfont.h \
+		../../QT/5.7/gcc_64/include/QtGui/qfontmetrics.h \
+		../../QT/5.7/gcc_64/include/QtGui/qfontinfo.h \
+		../../QT/5.7/gcc_64/include/QtWidgets/qsizepolicy.h \
+		../../QT/5.7/gcc_64/include/QtGui/qcursor.h \
+		../../QT/5.7/gcc_64/include/QtGui/qkeysequence.h \
+		../../QT/5.7/gcc_64/include/QtGui/qevent.h \
+		../../QT/5.7/gcc_64/include/QtCore/qvariant.h \
+		../../QT/5.7/gcc_64/include/QtCore/qmap.h \
+		../../QT/5.7/gcc_64/include/QtCore/qdebug.h \
+		../../QT/5.7/gcc_64/include/QtCore/qtextstream.h \
+		../../QT/5.7/gcc_64/include/QtCore/qlocale.h \
+		../../QT/5.7/gcc_64/include/QtCore/qset.h \
+		../../QT/5.7/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../QT/5.7/gcc_64/include/QtCore/qurl.h \
+		../../QT/5.7/gcc_64/include/QtCore/qurlquery.h \
+		../../QT/5.7/gcc_64/include/QtCore/qfile.h \
+		../../QT/5.7/gcc_64/include/QtCore/qfiledevice.h \
+		../../QT/5.7/gcc_64/include/QtGui/qvector2d.h \
+		../../QT/5.7/gcc_64/include/QtGui/qtouchdevice.h \
+		../serialport.h \
+		../../QT/5.7/gcc_64/include/QtWidgets/QMainWindow \
+		../../QT/5.7/gcc_64/include/QtWidgets/qmainwindow.h \
+		../../QT/5.7/gcc_64/include/QtWidgets/qtabwidget.h \
+		../../QT/5.7/gcc_64/include/QtGui/qicon.h \
+		../../QT/5.7/gcc_64/include/QtCore/QObject \
+		../../QT/5.7/gcc_64/include/QtCore/QTimer \
+		../../QT/5.7/gcc_64/include/QtCore/qtimer.h \
+		../../QT/5.7/gcc_64/include/QtCore/qbasictimer.h \
+		../../QT/5.7/gcc_64/include/QtCore/QDebug \
+		../../QT/5.7/gcc_64/include/QtSerialPort/QSerialPortInfo \
+		../../QT/5.7/gcc_64/include/QtSerialPort/qserialportinfo.h \
+		../../QT/5.7/gcc_64/include/QtSerialPort/qserialportglobal.h \
+		../../QT/5.7/gcc_64/include/QtSerialPort/QSerialPort \
+		../../QT/5.7/gcc_64/include/QtSerialPort/qserialport.h \
+		../principal.h \
+		../../QT/5.7/gcc_64/include/QtCore/QString \
+		../form.h \
+		../../QT/5.7/gcc_64/bin/moc
+	/home/esteban/QT/5.7/gcc_64/bin/moc $(DEFINES) -I/home/esteban/QT/5.7/gcc_64/mkspecs/linux-g++ -I/home/esteban/modbus2 -I/home/esteban/QT/5.7/gcc_64/include -I/home/esteban/QT/5.7/gcc_64/include/QtWidgets -I/home/esteban/QT/5.7/gcc_64/include/QtGui -I/home/esteban/QT/5.7/gcc_64/include/QtSerialPort -I/home/esteban/QT/5.7/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../form.h -o moc_form.cpp
+
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all:
+compiler_uic_make_all: ui_form.h
 compiler_uic_clean:
+	-$(DEL_FILE) ui_form.h
+ui_form.h: ../form.ui \
+		../../QT/5.7/gcc_64/bin/uic
+	/home/esteban/QT/5.7/gcc_64/bin/uic ../form.ui -o ui_form.h
+
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
 compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_header_clean 
+compiler_clean: compiler_moc_header_clean compiler_uic_clean 
 
 ####### Compile
 
@@ -821,7 +950,8 @@ main.o: ../main.cpp ../serialport.h \
 		../../QT/5.7/gcc_64/include/QtGui/qinputmethod.h \
 		../principal.h \
 		../../QT/5.7/gcc_64/include/QtCore/QString \
-		../Crc16.h
+		../form.h \
+		../../QT/5.7/gcc_64/include/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../main.cpp
 
 serialport.o: ../serialport.cpp ../serialport.h \
@@ -936,8 +1066,7 @@ serialport.o: ../serialport.cpp ../serialport.h \
 		../../QT/5.7/gcc_64/include/QtSerialPort/QSerialPort \
 		../../QT/5.7/gcc_64/include/QtSerialPort/qserialport.h \
 		../principal.h \
-		../../QT/5.7/gcc_64/include/QtCore/QString \
-		../Crc16.h
+		../../QT/5.7/gcc_64/include/QtCore/QString
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o serialport.o ../serialport.cpp
 
 principal.o: ../principal.cpp ../principal.h \
@@ -990,12 +1119,75 @@ principal.o: ../principal.cpp ../principal.h \
 		../../QT/5.7/gcc_64/include/QtCore/qcontainerfwd.h \
 		../../QT/5.7/gcc_64/include/QtCore/qobject_impl.h \
 		../../QT/5.7/gcc_64/include/QtCore/QString \
-		../serialport.h \
-		../../QT/5.7/gcc_64/include/QtWidgets/QMainWindow \
-		../../QT/5.7/gcc_64/include/QtWidgets/qmainwindow.h \
+		../../QT/5.7/gcc_64/include/QtCore/QDebug \
+		../../QT/5.7/gcc_64/include/QtCore/qdebug.h \
+		../../QT/5.7/gcc_64/include/QtCore/qhash.h \
+		../../QT/5.7/gcc_64/include/QtCore/qmap.h \
+		../../QT/5.7/gcc_64/include/QtCore/qtextstream.h \
+		../../QT/5.7/gcc_64/include/QtCore/qiodevice.h \
+		../../QT/5.7/gcc_64/include/QtCore/qlocale.h \
+		../../QT/5.7/gcc_64/include/QtCore/qvariant.h \
+		../../QT/5.7/gcc_64/include/QtCore/qshareddata.h \
+		../../QT/5.7/gcc_64/include/QtCore/qvector.h \
+		../../QT/5.7/gcc_64/include/QtCore/qpoint.h \
+		../../QT/5.7/gcc_64/include/QtCore/qset.h \
+		../../QT/5.7/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../QT/5.7/gcc_64/include/QtCore/qsharedpointer.h \
+		../../QT/5.7/gcc_64/include/QtCore/qsharedpointer_impl.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o principal.o ../principal.cpp
+
+form.o: ../form.cpp ../form.h \
+		../../QT/5.7/gcc_64/include/QtWidgets/QWidget \
 		../../QT/5.7/gcc_64/include/QtWidgets/qwidget.h \
 		../../QT/5.7/gcc_64/include/QtGui/qwindowdefs.h \
+		../../QT/5.7/gcc_64/include/QtCore/qglobal.h \
+		../../QT/5.7/gcc_64/include/QtCore/qconfig.h \
+		../../QT/5.7/gcc_64/include/QtCore/qfeatures.h \
+		../../QT/5.7/gcc_64/include/QtCore/qsystemdetection.h \
+		../../QT/5.7/gcc_64/include/QtCore/qprocessordetection.h \
+		../../QT/5.7/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../QT/5.7/gcc_64/include/QtCore/qtypeinfo.h \
+		../../QT/5.7/gcc_64/include/QtCore/qtypetraits.h \
+		../../QT/5.7/gcc_64/include/QtCore/qisenum.h \
+		../../QT/5.7/gcc_64/include/QtCore/qsysinfo.h \
+		../../QT/5.7/gcc_64/include/QtCore/qlogging.h \
+		../../QT/5.7/gcc_64/include/QtCore/qflags.h \
+		../../QT/5.7/gcc_64/include/QtCore/qatomic.h \
+		../../QT/5.7/gcc_64/include/QtCore/qbasicatomic.h \
+		../../QT/5.7/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../QT/5.7/gcc_64/include/QtCore/qgenericatomic.h \
+		../../QT/5.7/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../QT/5.7/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../QT/5.7/gcc_64/include/QtCore/qglobalstatic.h \
+		../../QT/5.7/gcc_64/include/QtCore/qmutex.h \
+		../../QT/5.7/gcc_64/include/QtCore/qnumeric.h \
+		../../QT/5.7/gcc_64/include/QtCore/qversiontagging.h \
+		../../QT/5.7/gcc_64/include/QtCore/qobjectdefs.h \
+		../../QT/5.7/gcc_64/include/QtCore/qnamespace.h \
+		../../QT/5.7/gcc_64/include/QtCore/qobjectdefs_impl.h \
 		../../QT/5.7/gcc_64/include/QtGui/qwindowdefs_win.h \
+		../../QT/5.7/gcc_64/include/QtCore/qobject.h \
+		../../QT/5.7/gcc_64/include/QtCore/qstring.h \
+		../../QT/5.7/gcc_64/include/QtCore/qchar.h \
+		../../QT/5.7/gcc_64/include/QtCore/qbytearray.h \
+		../../QT/5.7/gcc_64/include/QtCore/qrefcount.h \
+		../../QT/5.7/gcc_64/include/QtCore/qarraydata.h \
+		../../QT/5.7/gcc_64/include/QtCore/qstringbuilder.h \
+		../../QT/5.7/gcc_64/include/QtCore/qlist.h \
+		../../QT/5.7/gcc_64/include/QtCore/qalgorithms.h \
+		../../QT/5.7/gcc_64/include/QtCore/qiterator.h \
+		../../QT/5.7/gcc_64/include/QtCore/qhashfunctions.h \
+		../../QT/5.7/gcc_64/include/QtCore/qpair.h \
+		../../QT/5.7/gcc_64/include/QtCore/qbytearraylist.h \
+		../../QT/5.7/gcc_64/include/QtCore/qstringlist.h \
+		../../QT/5.7/gcc_64/include/QtCore/qregexp.h \
+		../../QT/5.7/gcc_64/include/QtCore/qstringmatcher.h \
+		../../QT/5.7/gcc_64/include/QtCore/qcoreevent.h \
+		../../QT/5.7/gcc_64/include/QtCore/qscopedpointer.h \
+		../../QT/5.7/gcc_64/include/QtCore/qmetatype.h \
+		../../QT/5.7/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../QT/5.7/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../QT/5.7/gcc_64/include/QtCore/qobject_impl.h \
 		../../QT/5.7/gcc_64/include/QtCore/qmargins.h \
 		../../QT/5.7/gcc_64/include/QtGui/qpaintdevice.h \
 		../../QT/5.7/gcc_64/include/QtCore/qrect.h \
@@ -1042,8 +1234,12 @@ principal.o: ../principal.cpp ../principal.h \
 		../../QT/5.7/gcc_64/include/QtCore/qfiledevice.h \
 		../../QT/5.7/gcc_64/include/QtGui/qvector2d.h \
 		../../QT/5.7/gcc_64/include/QtGui/qtouchdevice.h \
+		../serialport.h \
+		../../QT/5.7/gcc_64/include/QtWidgets/QMainWindow \
+		../../QT/5.7/gcc_64/include/QtWidgets/qmainwindow.h \
 		../../QT/5.7/gcc_64/include/QtWidgets/qtabwidget.h \
 		../../QT/5.7/gcc_64/include/QtGui/qicon.h \
+		../../QT/5.7/gcc_64/include/QtCore/QObject \
 		../../QT/5.7/gcc_64/include/QtCore/QTimer \
 		../../QT/5.7/gcc_64/include/QtCore/qtimer.h \
 		../../QT/5.7/gcc_64/include/QtCore/qbasictimer.h \
@@ -1053,11 +1249,49 @@ principal.o: ../principal.cpp ../principal.h \
 		../../QT/5.7/gcc_64/include/QtSerialPort/qserialportglobal.h \
 		../../QT/5.7/gcc_64/include/QtSerialPort/QSerialPort \
 		../../QT/5.7/gcc_64/include/QtSerialPort/qserialport.h \
-		../Crc16.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o principal.o ../principal.cpp
+		../principal.h \
+		../../QT/5.7/gcc_64/include/QtCore/QString \
+		ui_form.h \
+		../../QT/5.7/gcc_64/include/QtCore/QVariant \
+		../../QT/5.7/gcc_64/include/QtWidgets/QAction \
+		../../QT/5.7/gcc_64/include/QtWidgets/qaction.h \
+		../../QT/5.7/gcc_64/include/QtWidgets/qactiongroup.h \
+		../../QT/5.7/gcc_64/include/QtWidgets/QApplication \
+		../../QT/5.7/gcc_64/include/QtWidgets/qapplication.h \
+		../../QT/5.7/gcc_64/include/QtCore/qcoreapplication.h \
+		../../QT/5.7/gcc_64/include/QtCore/qeventloop.h \
+		../../QT/5.7/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		../../QT/5.7/gcc_64/include/QtGui/qguiapplication.h \
+		../../QT/5.7/gcc_64/include/QtGui/qinputmethod.h \
+		../../QT/5.7/gcc_64/include/QtWidgets/QButtonGroup \
+		../../QT/5.7/gcc_64/include/QtWidgets/qbuttongroup.h \
+		../../QT/5.7/gcc_64/include/QtWidgets/QHeaderView \
+		../../QT/5.7/gcc_64/include/QtWidgets/qheaderview.h \
+		../../QT/5.7/gcc_64/include/QtWidgets/qabstractitemview.h \
+		../../QT/5.7/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		../../QT/5.7/gcc_64/include/QtWidgets/qframe.h \
+		../../QT/5.7/gcc_64/include/QtCore/qabstractitemmodel.h \
+		../../QT/5.7/gcc_64/include/QtCore/qitemselectionmodel.h \
+		../../QT/5.7/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
+		../../QT/5.7/gcc_64/include/QtWidgets/qstyleoption.h \
+		../../QT/5.7/gcc_64/include/QtWidgets/qabstractspinbox.h \
+		../../QT/5.7/gcc_64/include/QtGui/qvalidator.h \
+		../../QT/5.7/gcc_64/include/QtCore/qregularexpression.h \
+		../../QT/5.7/gcc_64/include/QtWidgets/qslider.h \
+		../../QT/5.7/gcc_64/include/QtWidgets/qabstractslider.h \
+		../../QT/5.7/gcc_64/include/QtWidgets/qstyle.h \
+		../../QT/5.7/gcc_64/include/QtWidgets/qtabbar.h \
+		../../QT/5.7/gcc_64/include/QtWidgets/qrubberband.h \
+		../../QT/5.7/gcc_64/include/QtWidgets/QPushButton \
+		../../QT/5.7/gcc_64/include/QtWidgets/qpushbutton.h \
+		../../QT/5.7/gcc_64/include/QtWidgets/qabstractbutton.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o form.o ../form.cpp
 
 moc_serialport.o: moc_serialport.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_serialport.o moc_serialport.cpp
+
+moc_form.o: moc_form.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_form.o moc_form.cpp
 
 ####### Install
 

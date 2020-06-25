@@ -12,6 +12,8 @@
 
 
 
+
+
 class serialport : public QMainWindow
 {
     Q_OBJECT
@@ -22,11 +24,17 @@ public:
 
     QSerialPort *serial = new QSerialPort(this);
 
-
+    QByteArray data;
     bool configuracionpuerto(void);
     void cerrarpuerto(void);
     void escribirenpuerto(QByteArray data);
-    QByteArray readData(void);
+    void readData(void);
+
+    QTimer *temporizador = new QTimer();
+
+public slots:
+
+    void readbuffer(void);
 
 };
 
