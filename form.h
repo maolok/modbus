@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include "serialport.h"
-#include "principal.h"
+#include "modbus.h"
 #include <QDebug>
 
 namespace Ui {

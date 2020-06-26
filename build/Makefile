@@ -50,13 +50,13 @@ OBJECTS_DIR   = ./
 
 SOURCES       = ../main.cpp \
 		../serialport.cpp \
-		../principal.cpp \
-		../form.cpp moc_serialport.cpp \
+		../form.cpp \
+		../modbus.cpp moc_serialport.cpp \
 		moc_form.cpp
 OBJECTS       = main.o \
 		serialport.o \
-		principal.o \
 		form.o \
+		modbus.o \
 		moc_serialport.o \
 		moc_form.o
 DIST          = ../../../QT/5.7/gcc_64/mkspecs/features/spec_pre.prf \
@@ -209,11 +209,11 @@ DIST          = ../../../QT/5.7/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../QT/5.7/gcc_64/mkspecs/features/yacc.prf \
 		../../../QT/5.7/gcc_64/mkspecs/features/lex.prf \
 		../../modbus2.pro ../serialport.h \
-		../principal.h \
-		../form.h ../main.cpp \
+		../form.h \
+		../modbus.h ../main.cpp \
 		../serialport.cpp \
-		../principal.cpp \
-		../form.cpp
+		../form.cpp \
+		../modbus.cpp
 QMAKE_TARGET  = modbus2
 DESTDIR       = 
 TARGET        = modbus2
@@ -548,8 +548,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../serialport.h ../principal.h ../form.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../main.cpp ../serialport.cpp ../principal.cpp ../form.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../serialport.h ../form.h ../modbus.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../main.cpp ../serialport.cpp ../form.cpp ../modbus.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../form.ui $(DISTDIR)/
 
 
@@ -805,7 +805,7 @@ moc_form.cpp: ../../QT/5.7/gcc_64/include/QtWidgets/QWidget \
 		../../QT/5.7/gcc_64/include/QtSerialPort/qserialportglobal.h \
 		../../QT/5.7/gcc_64/include/QtSerialPort/QSerialPort \
 		../../QT/5.7/gcc_64/include/QtSerialPort/qserialport.h \
-		../principal.h \
+		../modbus.h \
 		../../QT/5.7/gcc_64/include/QtCore/QString \
 		../form.h \
 		../../QT/5.7/gcc_64/bin/moc
@@ -948,7 +948,7 @@ main.o: ../main.cpp ../serialport.h \
 		../../QT/5.7/gcc_64/include/QtWidgets/qdesktopwidget.h \
 		../../QT/5.7/gcc_64/include/QtGui/qguiapplication.h \
 		../../QT/5.7/gcc_64/include/QtGui/qinputmethod.h \
-		../principal.h \
+		../modbus.h \
 		../../QT/5.7/gcc_64/include/QtCore/QString \
 		../form.h \
 		../../QT/5.7/gcc_64/include/QtWidgets/QWidget
@@ -1065,76 +1065,9 @@ serialport.o: ../serialport.cpp ../serialport.h \
 		../../QT/5.7/gcc_64/include/QtSerialPort/qserialportglobal.h \
 		../../QT/5.7/gcc_64/include/QtSerialPort/QSerialPort \
 		../../QT/5.7/gcc_64/include/QtSerialPort/qserialport.h \
-		../principal.h \
+		../modbus.h \
 		../../QT/5.7/gcc_64/include/QtCore/QString
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o serialport.o ../serialport.cpp
-
-principal.o: ../principal.cpp ../principal.h \
-		../../QT/5.7/gcc_64/include/QtCore/QObject \
-		../../QT/5.7/gcc_64/include/QtCore/qobject.h \
-		../../QT/5.7/gcc_64/include/QtCore/qobjectdefs.h \
-		../../QT/5.7/gcc_64/include/QtCore/qnamespace.h \
-		../../QT/5.7/gcc_64/include/QtCore/qglobal.h \
-		../../QT/5.7/gcc_64/include/QtCore/qconfig.h \
-		../../QT/5.7/gcc_64/include/QtCore/qfeatures.h \
-		../../QT/5.7/gcc_64/include/QtCore/qsystemdetection.h \
-		../../QT/5.7/gcc_64/include/QtCore/qprocessordetection.h \
-		../../QT/5.7/gcc_64/include/QtCore/qcompilerdetection.h \
-		../../QT/5.7/gcc_64/include/QtCore/qtypeinfo.h \
-		../../QT/5.7/gcc_64/include/QtCore/qtypetraits.h \
-		../../QT/5.7/gcc_64/include/QtCore/qisenum.h \
-		../../QT/5.7/gcc_64/include/QtCore/qsysinfo.h \
-		../../QT/5.7/gcc_64/include/QtCore/qlogging.h \
-		../../QT/5.7/gcc_64/include/QtCore/qflags.h \
-		../../QT/5.7/gcc_64/include/QtCore/qatomic.h \
-		../../QT/5.7/gcc_64/include/QtCore/qbasicatomic.h \
-		../../QT/5.7/gcc_64/include/QtCore/qatomic_bootstrap.h \
-		../../QT/5.7/gcc_64/include/QtCore/qgenericatomic.h \
-		../../QT/5.7/gcc_64/include/QtCore/qatomic_cxx11.h \
-		../../QT/5.7/gcc_64/include/QtCore/qatomic_msvc.h \
-		../../QT/5.7/gcc_64/include/QtCore/qglobalstatic.h \
-		../../QT/5.7/gcc_64/include/QtCore/qmutex.h \
-		../../QT/5.7/gcc_64/include/QtCore/qnumeric.h \
-		../../QT/5.7/gcc_64/include/QtCore/qversiontagging.h \
-		../../QT/5.7/gcc_64/include/QtCore/qobjectdefs_impl.h \
-		../../QT/5.7/gcc_64/include/QtCore/qstring.h \
-		../../QT/5.7/gcc_64/include/QtCore/qchar.h \
-		../../QT/5.7/gcc_64/include/QtCore/qbytearray.h \
-		../../QT/5.7/gcc_64/include/QtCore/qrefcount.h \
-		../../QT/5.7/gcc_64/include/QtCore/qarraydata.h \
-		../../QT/5.7/gcc_64/include/QtCore/qstringbuilder.h \
-		../../QT/5.7/gcc_64/include/QtCore/qlist.h \
-		../../QT/5.7/gcc_64/include/QtCore/qalgorithms.h \
-		../../QT/5.7/gcc_64/include/QtCore/qiterator.h \
-		../../QT/5.7/gcc_64/include/QtCore/qhashfunctions.h \
-		../../QT/5.7/gcc_64/include/QtCore/qpair.h \
-		../../QT/5.7/gcc_64/include/QtCore/qbytearraylist.h \
-		../../QT/5.7/gcc_64/include/QtCore/qstringlist.h \
-		../../QT/5.7/gcc_64/include/QtCore/qregexp.h \
-		../../QT/5.7/gcc_64/include/QtCore/qstringmatcher.h \
-		../../QT/5.7/gcc_64/include/QtCore/qcoreevent.h \
-		../../QT/5.7/gcc_64/include/QtCore/qscopedpointer.h \
-		../../QT/5.7/gcc_64/include/QtCore/qmetatype.h \
-		../../QT/5.7/gcc_64/include/QtCore/qvarlengtharray.h \
-		../../QT/5.7/gcc_64/include/QtCore/qcontainerfwd.h \
-		../../QT/5.7/gcc_64/include/QtCore/qobject_impl.h \
-		../../QT/5.7/gcc_64/include/QtCore/QString \
-		../../QT/5.7/gcc_64/include/QtCore/QDebug \
-		../../QT/5.7/gcc_64/include/QtCore/qdebug.h \
-		../../QT/5.7/gcc_64/include/QtCore/qhash.h \
-		../../QT/5.7/gcc_64/include/QtCore/qmap.h \
-		../../QT/5.7/gcc_64/include/QtCore/qtextstream.h \
-		../../QT/5.7/gcc_64/include/QtCore/qiodevice.h \
-		../../QT/5.7/gcc_64/include/QtCore/qlocale.h \
-		../../QT/5.7/gcc_64/include/QtCore/qvariant.h \
-		../../QT/5.7/gcc_64/include/QtCore/qshareddata.h \
-		../../QT/5.7/gcc_64/include/QtCore/qvector.h \
-		../../QT/5.7/gcc_64/include/QtCore/qpoint.h \
-		../../QT/5.7/gcc_64/include/QtCore/qset.h \
-		../../QT/5.7/gcc_64/include/QtCore/qcontiguouscache.h \
-		../../QT/5.7/gcc_64/include/QtCore/qsharedpointer.h \
-		../../QT/5.7/gcc_64/include/QtCore/qsharedpointer_impl.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o principal.o ../principal.cpp
 
 form.o: ../form.cpp ../form.h \
 		../../QT/5.7/gcc_64/include/QtWidgets/QWidget \
@@ -1249,7 +1182,7 @@ form.o: ../form.cpp ../form.h \
 		../../QT/5.7/gcc_64/include/QtSerialPort/qserialportglobal.h \
 		../../QT/5.7/gcc_64/include/QtSerialPort/QSerialPort \
 		../../QT/5.7/gcc_64/include/QtSerialPort/qserialport.h \
-		../principal.h \
+		../modbus.h \
 		../../QT/5.7/gcc_64/include/QtCore/QString \
 		ui_form.h \
 		../../QT/5.7/gcc_64/include/QtCore/QVariant \
@@ -1286,6 +1219,73 @@ form.o: ../form.cpp ../form.h \
 		../../QT/5.7/gcc_64/include/QtWidgets/qpushbutton.h \
 		../../QT/5.7/gcc_64/include/QtWidgets/qabstractbutton.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o form.o ../form.cpp
+
+modbus.o: ../modbus.cpp ../modbus.h \
+		../../QT/5.7/gcc_64/include/QtCore/QObject \
+		../../QT/5.7/gcc_64/include/QtCore/qobject.h \
+		../../QT/5.7/gcc_64/include/QtCore/qobjectdefs.h \
+		../../QT/5.7/gcc_64/include/QtCore/qnamespace.h \
+		../../QT/5.7/gcc_64/include/QtCore/qglobal.h \
+		../../QT/5.7/gcc_64/include/QtCore/qconfig.h \
+		../../QT/5.7/gcc_64/include/QtCore/qfeatures.h \
+		../../QT/5.7/gcc_64/include/QtCore/qsystemdetection.h \
+		../../QT/5.7/gcc_64/include/QtCore/qprocessordetection.h \
+		../../QT/5.7/gcc_64/include/QtCore/qcompilerdetection.h \
+		../../QT/5.7/gcc_64/include/QtCore/qtypeinfo.h \
+		../../QT/5.7/gcc_64/include/QtCore/qtypetraits.h \
+		../../QT/5.7/gcc_64/include/QtCore/qisenum.h \
+		../../QT/5.7/gcc_64/include/QtCore/qsysinfo.h \
+		../../QT/5.7/gcc_64/include/QtCore/qlogging.h \
+		../../QT/5.7/gcc_64/include/QtCore/qflags.h \
+		../../QT/5.7/gcc_64/include/QtCore/qatomic.h \
+		../../QT/5.7/gcc_64/include/QtCore/qbasicatomic.h \
+		../../QT/5.7/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		../../QT/5.7/gcc_64/include/QtCore/qgenericatomic.h \
+		../../QT/5.7/gcc_64/include/QtCore/qatomic_cxx11.h \
+		../../QT/5.7/gcc_64/include/QtCore/qatomic_msvc.h \
+		../../QT/5.7/gcc_64/include/QtCore/qglobalstatic.h \
+		../../QT/5.7/gcc_64/include/QtCore/qmutex.h \
+		../../QT/5.7/gcc_64/include/QtCore/qnumeric.h \
+		../../QT/5.7/gcc_64/include/QtCore/qversiontagging.h \
+		../../QT/5.7/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		../../QT/5.7/gcc_64/include/QtCore/qstring.h \
+		../../QT/5.7/gcc_64/include/QtCore/qchar.h \
+		../../QT/5.7/gcc_64/include/QtCore/qbytearray.h \
+		../../QT/5.7/gcc_64/include/QtCore/qrefcount.h \
+		../../QT/5.7/gcc_64/include/QtCore/qarraydata.h \
+		../../QT/5.7/gcc_64/include/QtCore/qstringbuilder.h \
+		../../QT/5.7/gcc_64/include/QtCore/qlist.h \
+		../../QT/5.7/gcc_64/include/QtCore/qalgorithms.h \
+		../../QT/5.7/gcc_64/include/QtCore/qiterator.h \
+		../../QT/5.7/gcc_64/include/QtCore/qhashfunctions.h \
+		../../QT/5.7/gcc_64/include/QtCore/qpair.h \
+		../../QT/5.7/gcc_64/include/QtCore/qbytearraylist.h \
+		../../QT/5.7/gcc_64/include/QtCore/qstringlist.h \
+		../../QT/5.7/gcc_64/include/QtCore/qregexp.h \
+		../../QT/5.7/gcc_64/include/QtCore/qstringmatcher.h \
+		../../QT/5.7/gcc_64/include/QtCore/qcoreevent.h \
+		../../QT/5.7/gcc_64/include/QtCore/qscopedpointer.h \
+		../../QT/5.7/gcc_64/include/QtCore/qmetatype.h \
+		../../QT/5.7/gcc_64/include/QtCore/qvarlengtharray.h \
+		../../QT/5.7/gcc_64/include/QtCore/qcontainerfwd.h \
+		../../QT/5.7/gcc_64/include/QtCore/qobject_impl.h \
+		../../QT/5.7/gcc_64/include/QtCore/QString \
+		../../QT/5.7/gcc_64/include/QtCore/QDebug \
+		../../QT/5.7/gcc_64/include/QtCore/qdebug.h \
+		../../QT/5.7/gcc_64/include/QtCore/qhash.h \
+		../../QT/5.7/gcc_64/include/QtCore/qmap.h \
+		../../QT/5.7/gcc_64/include/QtCore/qtextstream.h \
+		../../QT/5.7/gcc_64/include/QtCore/qiodevice.h \
+		../../QT/5.7/gcc_64/include/QtCore/qlocale.h \
+		../../QT/5.7/gcc_64/include/QtCore/qvariant.h \
+		../../QT/5.7/gcc_64/include/QtCore/qshareddata.h \
+		../../QT/5.7/gcc_64/include/QtCore/qvector.h \
+		../../QT/5.7/gcc_64/include/QtCore/qpoint.h \
+		../../QT/5.7/gcc_64/include/QtCore/qset.h \
+		../../QT/5.7/gcc_64/include/QtCore/qcontiguouscache.h \
+		../../QT/5.7/gcc_64/include/QtCore/qsharedpointer.h \
+		../../QT/5.7/gcc_64/include/QtCore/qsharedpointer_impl.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o modbus.o ../modbus.cpp
 
 moc_serialport.o: moc_serialport.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_serialport.o moc_serialport.cpp

@@ -1,6 +1,6 @@
 #include "serialport.h"
 #include <QApplication>
-#include "principal.h"
+#include "modbus.h"
 #include <QDebug>
 #include <stdlib.h>
 #include <stdio.h>

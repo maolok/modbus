@@ -1,6 +1,6 @@
 #include "serialport.h"
 #include <QTimer>
-#include "principal.h"
+#include "modbus.h"
 #include <QDebug>
 
 serialport::serialport(QWidget *parent)
@@ -22,7 +22,7 @@ serialport::~serialport()
 bool serialport::configuracionpuerto()
 {
 
-        serial->setPortName("ttyUSB0");
+        serial->setPortName("ttyUSB1");
         serial->setBaudRate(QSerialPort::Baud9600);
         serial->setDataBits(QSerialPort::Data8);
         serial->setParity(QSerialPort::NoParity);
@@ -54,7 +54,7 @@ void serialport::cerrarpuerto()
 
 void serialport::readData()
 {
-    temporizador->start(1000);
+    temporizador->start(1500);
 
 
 
@@ -62,20 +62,21 @@ void serialport::readData()
 
 void serialport::readbuffer()
 {
+    /*
 #ifdef esteban_gay
     qDebug()<<"esteban le gusta ymca";
 
 #else
     qDebug()<<"esteban le gusta lady gaga";
 #endif
-
+*/
      temporizador->stop();
      data = serial->readAll();
      qDebug()<<"RESPUESTA : "<<data;
      principal p;
 
-   /*
 
+/*
      DataW data1 = p.extraerdatosW(data);
      qDebug()<<"datos :";
      qDebug()<<"id esclavo :"<<data1.idslave;

@@ -57,6 +57,7 @@ private:
     unsigned short Getmsb(unsigned short num);
     unsigned short Getlsb(unsigned short num);
     uint CRC16_2(QByteArray buf, int len);
+    unsigned int CRC16_3(unsigned char *buf, int len);
     int validarcrc16(QByteArray trama);
 
 

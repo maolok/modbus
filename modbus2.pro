@@ -15,12 +15,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         serialport.cpp \
-    principal.cpp \
-    form.cpp
+    form.cpp \
+    modbus.cpp
 
 HEADERS  += serialport.h \
-    principal.h \
-    form.h
+    form.h \
+    modbus.h
 
 FORMS += \
     form.ui
