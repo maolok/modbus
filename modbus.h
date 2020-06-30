@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define qdebug//poner en ingles debug
+#define qdebug
 
 
 struct DataW{
@@ -30,11 +30,11 @@ struct DataR{
 
 };
 
-class principal
+class modbus
 {
 public:
 
-    principal();
+    modbus();
 
 
     QByteArray Writeholdingregister(int idslave,int startregister,int numregister,uint16_t *data);
@@ -56,4 +56,4 @@ private:
 
 
 
-#endif // PRINCIPAL_H
+#endif // MODBUS_H

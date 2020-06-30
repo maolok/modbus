@@ -26,7 +26,7 @@ private slots:
 private:
     Ui::Form *ui;
     serialport *puerto = new serialport();
-    principal *modbus = new principal();
+    modbus *Modbus = new modbus();
 
 };
 

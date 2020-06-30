@@ -65,7 +65,7 @@ void serialport::readbuffer()
 
      temporizador->stop();
      data = serial->readAll();
-     principal p;
+     modbus p;
 
 
 #ifdef qdebugwrite

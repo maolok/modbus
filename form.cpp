@@ -18,7 +18,7 @@ Form::~Form()
 void Form::on_pushButton_clicked()
 {
     uint16_t data[] = {'@','@',0xcccc};
-    QByteArray tramaescritura = modbus->Writeholdingregister(42,0,3,data);
+    QByteArray tramaescritura = Modbus->Writeholdingregister(42,0,3,data);
     puerto->escribirenpuerto(tramaescritura);
 
 
@@ -26,7 +26,7 @@ void Form::on_pushButton_clicked()
 
 void Form::on_pushButton_2_clicked()
 {
-    QByteArray tramalectura = modbus->Readholdingregister(42,0,3);
+    QByteArray tramalectura = Modbus->Readholdingregister(42,0,3);
     puerto->escribirenpuerto(tramalectura);
 
 }

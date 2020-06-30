@@ -1,14 +1,14 @@
 #include "modbus.h"
 
 
-principal::principal()
+modbus::modbus()
 {
 
 }
 
 //start regis min 0 max 9
 //num regis min 1 max 10
-QByteArray principal::Writeholdingregister(int idslave,int startregister,int numregister, uint16_t *data)
+QByteArray modbus::Writeholdingregister(int idslave,int startregister,int numregister, uint16_t *data)
 {
 
     QByteArray tramafinal;
@@ -128,7 +128,7 @@ QByteArray principal::Writeholdingregister(int idslave,int startregister,int num
 
 }
 
-QByteArray principal::Readholdingregister(int idslave, int startregister, int numregister)
+QByteArray modbus::Readholdingregister(int idslave, int startregister, int numregister)
 {
     unsigned char trama[6];
     QByteArray tramafinal;
@@ -167,7 +167,7 @@ QByteArray principal::Readholdingregister(int idslave, int startregister, int nu
 
 }
 
-int principal::validarcrc16(QByteArray trama)
+int modbus::validarcrc16(QByteArray trama)
 {
 
 
@@ -227,7 +227,7 @@ int principal::validarcrc16(QByteArray trama)
 
 }
 
-DataW principal::extraerdatosW(QByteArray trama)
+DataW modbus::extraerdatosW(QByteArray trama)
 {
 
     DataW datos;
@@ -254,7 +254,7 @@ DataW principal::extraerdatosW(QByteArray trama)
 
 }
 
-DataR principal::extraerdatosR(QByteArray trama)
+DataR modbus::extraerdatosR(QByteArray trama)
 {
     DataR datos;
     if(validarcrc16(trama) == 1)
@@ -282,7 +282,7 @@ DataR principal::extraerdatosR(QByteArray trama)
 
 
 }
-unsigned short principal::Getmsb(unsigned short num)  // funcion para conseguir los bytes mas significativos msb
+unsigned short modbus::Getmsb(unsigned short num)  // funcion para conseguir los bytes mas significativos msb
 {
 
   uint16_t palabra = 0xff00;
@@ -295,7 +295,7 @@ unsigned short principal::Getmsb(unsigned short num)  // funcion para conseguir 
 
   }
 
-unsigned short principal::Getlsb(unsigned short num)// funcion para conseguir los bytes menos significativos lsb
+unsigned short modbus::Getlsb(unsigned short num)// funcion para conseguir los bytes menos significativos lsb
 {
 
   uint16_t palabra = 0x00ff;
@@ -305,7 +305,7 @@ unsigned short principal::Getlsb(unsigned short num)// funcion para conseguir lo
 
 
 }
-uint principal::CRC16_2(QByteArray buf, int len)
+uint modbus::CRC16_2(QByteArray buf, int len)
 {
   uint crc = 0xFFFF;
 
@@ -325,7 +325,7 @@ uint principal::CRC16_2(QByteArray buf, int len)
   // Note, this number has low and high bytes swapped, so use it accordingly (or swap bytes)
   return crc;
 }
-unsigned int principal::CRC16_3(unsigned char *buf, int len)
+unsigned int modbus::CRC16_3(unsigned char *buf, int len)
 {
   unsigned int crc = 0xFFFF;
   for (int pos = 0; pos < len; pos++)
