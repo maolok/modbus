@@ -15,15 +15,13 @@ QByteArray principal::Writeholdingregister(int idslave,int startregister,int num
 
     int longitud;
 
-
-
     if (numregister == 1)
     {
 
 
         unsigned char trama[6];
         trama[0] = idslave;
-        trama[1] = 0x06;
+        trama[1] = 0x06; //write single register
         trama[2] = 0x00;
         trama[3] = startregister;
 
@@ -63,7 +61,7 @@ QByteArray principal::Writeholdingregister(int idslave,int startregister,int num
 
         unsigned char trama[(7+(2*numregister))];
         trama[0] = idslave;
-        trama[1] = 0x10;
+        trama[1] = 0x10;   //write multiple registers
         trama[2] = 0x00;
         trama[3] = startregister;
         trama[4] = 0x00;
@@ -121,8 +119,10 @@ QByteArray principal::Writeholdingregister(int idslave,int startregister,int num
 
     }
 
-
-
+#ifdef qdebug
+        qDebug()<<"TRAMA ENVIADA WRITE :"<<tramafinal;
+        qDebug()<<"SENT ADU: "<<tramafinal.toHex();
+#endif
         return tramafinal;
 
 
@@ -157,9 +157,12 @@ QByteArray principal::Readholdingregister(int idslave, int startregister, int nu
     tramafinal.append(lsb1);
     tramafinal.append(msb1);
 
-
-
+#ifdef qdebug
+    qDebug()<<"TRAMA ENVIADA READ :"<<tramafinal;
+    qDebug()<<"SENT ADU: "<<tramafinal.toHex();
+#endif
     return tramafinal;
+
 
 
 }
@@ -171,12 +174,16 @@ int principal::validarcrc16(QByteArray trama)
     unsigned char trama1[trama.length()];
     QByteArray crccalculado,crctrama;
 
+#ifdef qdebug
     qDebug()<<"received ADU:"<<trama.toHex();
+#endif
+
+
 
     for (int i=0;i<trama.length();i++)
     {
         trama1[i]=trama.at(i);
-        //qDebug()<<trama[i];
+
     }
 
 
@@ -190,20 +197,31 @@ int principal::validarcrc16(QByteArray trama)
 
     crccalculado.append(lsb1);
 
-    qDebug()<<"crc calculado :"<<crccalculado.toHex();
+#ifdef qdebug
+     qDebug()<<"crc calculado :"<<crccalculado.toHex();
+#endif
+
+
 
     crctrama.append(trama.at((trama.length()-1)));
     crctrama.append(trama.at((trama.length()-2)));
 
+
+#ifdef qdebug
     qDebug()<<"crc trama :"<<crctrama.toHex();
+#endif
 
     if (crctrama == crccalculado)
     {
-
+#ifdef qdebug
         qDebug()<<"CRC ES EL MISMO";
+#endif
         return 1;
     }
-    else {qDebug()<<"CRC DISTINTO";
+    else {
+#ifdef qdebug
+        qDebug()<<"CRC DISTINTO";
+#endif
                     return 0;}
 
 
@@ -211,6 +229,7 @@ int principal::validarcrc16(QByteArray trama)
 
 DataW principal::extraerdatosW(QByteArray trama)
 {
+
     DataW datos;
     if(validarcrc16(trama) == 1)
     {

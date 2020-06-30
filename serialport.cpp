@@ -22,7 +22,7 @@ serialport::~serialport()
 bool serialport::configuracionpuerto()
 {
 
-        serial->setPortName("ttyUSB1");
+        serial->setPortName("ttyUSB0");
         serial->setBaudRate(QSerialPort::Baud9600);
         serial->setDataBits(QSerialPort::Data8);
         serial->setParity(QSerialPort::NoParity);
@@ -62,44 +62,37 @@ void serialport::readData()
 
 void serialport::readbuffer()
 {
-    /*
-#ifdef esteban_gay
-    qDebug()<<"esteban le gusta ymca";
 
-#else
-    qDebug()<<"esteban le gusta lady gaga";
-#endif
-*/
      temporizador->stop();
      data = serial->readAll();
-     qDebug()<<"RESPUESTA : "<<data;
      principal p;
 
 
-/*
-     DataW data1 = p.extraerdatosW(data);
+#ifdef qdebugwrite
+
+     DataW datoswrite = p.extraerdatosW(data);
      qDebug()<<"datos :";
-     qDebug()<<"id esclavo :"<<data1.idslave;
+     qDebug()<<"id esclavo :"<<datoswrite.idslave;
 
-     qDebug()<<"Registro de inicio:"<<data1.desde;
-     qDebug()<<"# Registros escritos :"<<data1.cantidadregistros;
-     qDebug()<<"validacion crc :"<<data1.validacioncrc;
-
-*/
+     qDebug()<<"Registro de inicio:"<<datoswrite.desde;
+     qDebug()<<"# Registros escritos :"<<datoswrite.cantidadregistros;
+     qDebug()<<"validacion crc :"<<datoswrite.validacioncrc;
 
 
+#else
 
 
-     DataR data1 = p.extraerdatosR(data);
+
+     DataR datosread = p.extraerdatosR(data);
 
      qDebug()<<"datos :";
-     qDebug()<<"id esclavo :"<<data1.idslave;
+     qDebug()<<"id esclavo :"<<datosread.idslave;
 
-     qDebug()<<"# bytes :"<<data1.numbytes;
-     qDebug()<<"datos :"<<data1.data;
-     qDebug()<<"validacion crc :"<<data1.validacioncrc;
+     qDebug()<<"# bytes :"<<datosread.numbytes;
+     qDebug()<<"datos :"<<datosread.data;
+     qDebug()<<"validacion crc :"<<datosread.validacioncrc;
 
-
+#endif
 
 
 

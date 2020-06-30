@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//#define esteban_gay
+#define qdebug//poner en ingles debug
 
 
 struct DataW{
@@ -30,22 +30,13 @@ struct DataR{
 
 };
 
-/*
-struct pipi{
-
-    int idslave;
-    int startregister;
-    int numregister;
-    uint16_t *data;
-};*/
-
 class principal
 {
 public:
 
     principal();
 
-    //QByteArray Writeholdingregister(pipi pi);
+
     QByteArray Writeholdingregister(int idslave,int startregister,int numregister,uint16_t *data);
     QByteArray Readholdingregister(int idslave,int startregister,int numregister);
     DataW extraerdatosW(QByteArray trama);

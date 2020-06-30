@@ -9,9 +9,7 @@
 #include <QSerialPort>
 #include <QDebug>
 
-
-
-
+//#define qdebugwrite
 
 
 class serialport : public QMainWindow
